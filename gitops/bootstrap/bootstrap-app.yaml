@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-bootstrap
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  sources:
+    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
+      path: gitops/bootstrap
+      targetRevision: HEAD
+    - repoURL: https://github.com/ImagineLearning/otk-platform
+      path: gitops/clusters
+      targetRevision: HEAD
+    - repoURL: https://github.com/ImagineLearning/otk-platform
+      path: gitops/addons
+      targetRevision: HEAD

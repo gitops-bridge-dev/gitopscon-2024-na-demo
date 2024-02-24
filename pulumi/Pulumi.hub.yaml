@@ -1,0 +1,12 @@
+config:
+  aws:region: us-east-1
+  awsAccountId: "1234"
+  cidrBlock: 10.0.0.0/16
+  githubOrg: "gitops-bridge-dev"
+  githubRepo: "gitopscon-2024-na-demo"
+  secretPath: "gitops/clusters/hub-cluster.yaml"
+  clusterType: "hub"
+  implementationType: "github"
+  clusterComponents: {}
+  adminClusterIamRole: "INSERT Iam Role ARN here"
+  adminClusterUser: "INSERT User ARN here"

@@ -1,0 +1,39 @@
+name: Pulumi Prototype Preview
+on:
+  - pull_request
+env:
+  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PULUMI_GITHUB_TOKEN }}
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # This IAM Matrix should have a name with the stack name and an iamRole
+      # with access to deploy AWS resources in you account. The easiest method is attaching AdministratorAccess Policy to role
+      # See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services for details on implementing OIDC with Github Actions
+      matrix:
+        arrays: [ 
+          stack: {name: "hub", iamRole: "INSERT-IAM-ROLE"}, 
+        ]
+    permissions:
+      id-token: write
+      contents: read
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ matrix.arrays.stack.iamRole }}
+          aws-region: us-east-2
+      - run: |
+          cd ./pulumi
+          npm install
+      - uses: pulumi/actions@v3
+        with:
+          color: auto
+          command: preview
+          work-dir: ./pulumi
+          stack-name: ${{ matrix.arrays.stack.name }}
