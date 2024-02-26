@@ -3,7 +3,7 @@ on:
   - pull_request
 env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-  GITHUB_TOKEN: ${{ secrets.PULUMI_GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.DEPLOY_PAT }}
 
 jobs:
   preview:
@@ -15,7 +15,7 @@ jobs:
       # See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services for details on implementing OIDC with Github Actions
       matrix:
         arrays: [ 
-          stack: {name: "hub", iamRole: "INSERT-IAM-ROLE"}, 
+          stack: {name: "hub", iamRole: "arn:aws:iam::753080021511:role/pulumi-github-actions"}, 
         ]
     permissions:
       id-token: write
