@@ -96,6 +96,15 @@ const eksCluster = new eks.Cluster(`${stackName}-cluster`, {
     maxSize: 50,
     desiredCapacity: 10,
   },
+},{
+  transformations: [args => {
+    if (args.type === "aws:eks/cluster:Cluster") {
+      args.props["accessConfig"] = {
+        authenticationMode: "API_AND_CONFIG_MAP"
+      };
+    }
+    return undefined;
+  }]
 })
 
 outputs.clusterName = eksCluster.eksCluster.name
