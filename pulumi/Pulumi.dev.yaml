@@ -9,5 +9,5 @@ config:
   secretPath: "gitops/clusters/dev-cluster.yaml"
   implementationType: "github"
   clusterComponents: {}
-  adminClusterIamRole: "INSERT Iam Role ARN here"
+  # adminClusterIamRole: ""
   adminClusterUser: "arn:aws:iam::753080021511:user/BlakeRomano"

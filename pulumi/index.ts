@@ -92,9 +92,10 @@ const eksCluster = new eks.Cluster(`${stackName}-cluster`, {
     nodeSubnetIds: vpc.privateSubnetIds,
     nodeRootVolumeEncrypted: true,
     nodeRootVolumeType: "gp3",
+    instanceType: "t3.medium",
     minSize: 1,
-    maxSize: 50,
-    desiredCapacity: 10,
+    maxSize: 25,
+    desiredCapacity: 4,
   },
 },{
   transformations: [args => {
