@@ -15,9 +15,9 @@ spec:
     - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
       path: gitops/bootstrap
       targetRevision: HEAD
-    - repoURL: https://github.com/ImagineLearning/otk-platform
+    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
       path: gitops/clusters
       targetRevision: HEAD
-    - repoURL: https://github.com/ImagineLearning/otk-platform
+    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
       path: gitops/addons
       targetRevision: HEAD

@@ -9,6 +9,15 @@ aws eks --region us-east-1 update-kubeconfig --name hub-cluster --alias hub-clus
 kubectl create namespace argocd --context hub-cluster
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --context hub-cluster
 
+kubectl create secret generic private-repo-creds -n argocd \
+    --from-literal=username=REPLACE_USERNAME \
+    --from-literal=password=$GITHUB_TOKEN \
+    --from-literal=type=git \
+    --from-literal=url=https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo \
+    --dry-run=client -o yaml | \
+    sed "s/namespace: argocd/namespace: argocd\n  labels:\n    argocd.argoproj.io\/secret-type: repository/" | \
+    kubectl apply -f -
+
 kubectl apply -f "../gitops/clusters/hub-cluster.yaml"
 kubectl apply -f "../gitops/bootstrap/bootstrap-app.yaml"
 
