@@ -9,7 +9,7 @@ aws eks --region us-east-1 update-kubeconfig --name hub-cluster --alias hub-clus
 kubectl create namespace argocd --context hub-cluster
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --context hub-cluster
 
-kubectl apply -f "../gitops/bootstrap/hub-cluster.yaml"
+kubectl apply -f "../gitops/clusters/hub-cluster.yaml"
 kubectl apply -f "../gitops/bootstrap/bootstrap-app.yaml"
 
 # Echo command to port forward ArgoCD and get admin password
