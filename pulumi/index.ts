@@ -6,26 +6,8 @@ import { GitOpsClusterConfig } from "./github"
 
 const stackName = pulumi.getStack()
 const config = new pulumi.Config()
-let adminRole = config.get("adminClusterIamRole")
-let adminUser = config.get("adminClusterUser")
 
 let roleMappings: eks.RoleMapping[] = []
-let userMappings: eks.UserMapping[] = []
-
-if (adminRole !== undefined) {
-  roleMappings.push({
-    roleArn: adminRole as string,
-    groups: ["system:masters"],
-    username: adminRole as string,
-  })
-}
-if (adminUser !== undefined) {
-  userMappings.push({
-    userArn: adminUser as string,
-    groups: ["system:masters"],
-    username: adminUser as string,
-  })
-}
 
 export const outputs: {[key: string]: any} = {
   "stackName": stackName,
