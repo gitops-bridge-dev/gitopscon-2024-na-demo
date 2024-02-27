@@ -1,0 +1,13 @@
+config:
+  aws:region: us-east-1
+  cidrBlock: 10.0.0.0/16
+  awsAccountId: "753080021511"
+  clusterType: "spoke"
+  hubStackName: "hub"
+  githubOrg: "gitops-bridge"
+  githubRepo: "gitopscon-2024-na-demo"
+  secretPath: "gitops/clusters/dev-cluster.yaml"
+  implementationType: "github"
+  clusterComponents: {}
+  adminClusterIamRole: "INSERT Iam Role ARN here"
+  adminClusterUser: "arn:aws:iam::753080021511:user/BlakeRomano"
