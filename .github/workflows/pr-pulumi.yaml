@@ -3,7 +3,7 @@ on:
   - pull_request
 env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-  GITHUB_TOKEN: ${{ secrets.DEPLOY_PAT }}
+  GITHUB_TOKEN: ${{ secrets.PULUMI_GITHUB_TOKEN }}
 
 jobs:
   preview:
