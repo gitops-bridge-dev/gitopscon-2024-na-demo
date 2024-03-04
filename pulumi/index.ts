@@ -19,6 +19,9 @@ const vpc = new awsx.ec2.Vpc("vpc", {
   numberOfAvailabilityZones: 3,
   enableDnsHostnames: true,
   enableDnsSupport: true,
+  natGateways: {
+    strategy: awsx.ec2.NatGatewayStrategy.Single,
+  },
   subnetSpecs: [
     {
       type: awsx.ec2.SubnetType.Private,
