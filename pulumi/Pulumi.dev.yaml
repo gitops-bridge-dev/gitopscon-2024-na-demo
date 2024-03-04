@@ -5,7 +5,7 @@ config:
   clusterType: "spoke"
   name: "dev"
   hubStackName: "blakeromano/gitopscon-2024-na-demo/hub"
-  githubOrg: "gitops-bridge"
+  githubOrg: "gitops-bridge-dev"
   githubRepo: "gitopscon-2024-na-demo"
   secretPath: "gitops/clusters/dev-cluster.yaml"
   implementationType: "github"
