@@ -3,6 +3,7 @@ config:
   cidrBlock: 10.0.0.0/16
   awsAccountId: "753080021511"
   clusterType: "spoke"
+  name: "dev"
   hubStackName: "blakeromano/gitopscon-2024-na-demo/hub"
   githubOrg: "gitops-bridge"
   githubRepo: "gitopscon-2024-na-demo"
