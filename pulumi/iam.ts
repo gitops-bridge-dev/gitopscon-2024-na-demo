@@ -8,7 +8,7 @@ export function createArgoRole(
   ) {
   if (config.require("clusterType") === "spoke") {
     const hubStack = new pulumi.StackReference("hub-argorole-ref", {
-      name: config.require("hubStackName")
+      name: config.require("blakeromano/gitopscon-2024-na-demo/hub")
     })
     const outputs = hubStack.getOutput("outputs") as pulumi.Output<{[key: string]: string}>
     const policy = outputs.apply((outputs) => JSON.stringify({
