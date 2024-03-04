@@ -44,6 +44,9 @@ const vpc = new awsx.ec2.Vpc("vpc", {
       },
     },
   ],
+  tags: {
+    "name": stackName,
+  },
 })
 
 // If we are creating a spoke cluster we need to create argoRole first, ensure it
@@ -81,6 +84,9 @@ const eksCluster = new eks.Cluster(`${stackName}-cluster`, {
     minSize: 1,
     maxSize: 25,
     desiredCapacity: 4,
+  },
+  tags: {
+    "name": stackName,
   },
 },{
   transformations: [args => {
