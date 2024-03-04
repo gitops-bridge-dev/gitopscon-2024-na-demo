@@ -20,6 +20,7 @@ jobs:
       matrix:
         arrays: [ 
           stack: {name: "hub", iamRole: "arn:aws:iam::753080021511:role/pulumi-github-actions"}, 
+          stack: {name: "dev", iamRole: "arn:aws:iam::753080021511:role/pulumi-github-actions"}, 
         ]
     permissions:
       id-token: write
