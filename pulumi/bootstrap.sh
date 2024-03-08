@@ -9,6 +9,12 @@ aws eks --region us-east-1 update-kubeconfig --name hub-cluster --alias hub-clus
 kubectl create namespace argocd --context hub-cluster
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --context hub-cluster
 
+kubectl annotate serviceaccount argocd-server argocd-application-controller \
+    eks.amazonaws.com/role-arn=<INSERT-ROLE-ARN> --namespace=argocd
+
+kubectl rollout restart deployment argocd-server
+kubectl rollout restart sts argocd-application-controller
+
 kubectl create secret generic private-repo-creds -n argocd \
     --from-literal=username=REPLACE_USERNAME \
     --from-literal=password=$GITHUB_TOKEN \
