@@ -5,6 +5,7 @@ config:
   githubOrg: "gitops-bridge-dev"
   githubRepo: "gitopscon-2024-na-demo"
   secretPath: "gitops/clusters/hub-cluster.yaml"
+  name: "hub"
   clusterType: "hub"
   implementationType: "github"
   clusterComponents: {}
