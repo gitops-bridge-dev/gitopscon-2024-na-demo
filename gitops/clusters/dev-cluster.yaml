@@ -6,6 +6,8 @@ metadata:
   annotations:
     aws_cluster_name: dev-cluster
     k8s_service_host: FCE8B11655CD8A0263DA638CE2A9BC71.gr7.us-east-1.eks.amazonaws.com
+    velero_bucket_name: gitopscon-na-24-velero-backups-dev
+    velero_iam_role_arn: arn:aws:iam::753080021511:role/velero-role-28d8f10
   name: dev-cluster-secret
   namespace: argocd
 type: Opaque
