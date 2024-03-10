@@ -60,6 +60,11 @@ spec:
                   bucket: {{metadata.annotations.velero_bucket_name}}
                   config:
                     region: us-east-1
+                volumeSnapshotLocation:
+                - name: default
+                  provider: aws
+                  config:
+                    region: us-east-1
               serviceAccount:
                 server:
                   name: velero
