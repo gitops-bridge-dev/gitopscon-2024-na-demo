@@ -3,6 +3,7 @@ import * as awsx from "@pulumi/awsx";
 import * as eks from "@pulumi/eks";
 import { createArgoRole } from "./iam"
 import { GitOpsClusterConfig } from "./github"
+import { createVeleroResources } from "./components"
 
 const stackName = pulumi.getStack()
 const config = new pulumi.Config()
@@ -103,6 +104,9 @@ outputs.clusterName = eksCluster.eksCluster.name
 outputs.clusterApiEndpoint = eksCluster.core.endpoint
 
 const oidcProviderUrl = eksCluster.core.oidcProvider?.url as pulumi.Output<string>
+const { veleroIamRole, veleroBucket } = createVeleroResources(config.require("awsAccountId"), oidcProviderUrl, config.require("name"))
+outputs.veleroBucket = veleroBucket.bucket,
+outputs.veleroIamRoleArn = veleroIamRole.arn
 
 // If we are creating the hub cluster we need pods in eks cluster to be able to assume
 // so we need cluster created first
