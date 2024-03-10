@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   labels:
     argocd.argoproj.io/secret-type: cluster
+    environment: staging
+    enable_velero: 'true'
   annotations:
     aws_cluster_name: dev-cluster
     k8s_service_host: FCE8B11655CD8A0263DA638CE2A9BC71.gr7.us-east-1.eks.amazonaws.com
