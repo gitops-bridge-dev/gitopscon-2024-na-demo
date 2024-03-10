@@ -76,14 +76,20 @@ export class GitOpsClusterConfig {
     const outputs = pulumi.all([
       this.outputs.clusterName,
       this.outputs.clusterApiEndpoint,
+      this.outputs.veleroBucket,
+      this.outputs.veleroIamRoleArn,
     ])
     const annotations = outputs.apply(([
       clusterName,
       clusterApiEndpoint,
+      veleroBucket,
+      veleroIamRoleArn,
     ]) => {
       return {
         "aws_cluster_name": clusterName,
         "k8s_service_host": clusterApiEndpoint.split("://")[1],
+        "velero_bucket_name": veleroBucket,
+        "velero_iam_role_arn": veleroIamRoleArn
       }
     })
     return annotations
