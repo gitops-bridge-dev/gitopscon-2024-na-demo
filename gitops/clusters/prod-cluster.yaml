@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   labels:
     argocd.argoproj.io/secret-type: cluster
+    environment: prod
+    enable_velero: 'true'
   annotations:
     aws_cluster_name: prod-cluster
     k8s_service_host: 5B8E50459D84F3A74278805CC500D1B0.gr7.us-east-1.eks.amazonaws.com
