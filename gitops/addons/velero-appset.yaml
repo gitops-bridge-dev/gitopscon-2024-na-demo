@@ -18,14 +18,9 @@ spec:
                 addonChartRepository: https://vmware-tanzu.github.io/helm-charts
               selector:
                 matchExpressions:
-                  - key: akuity.io/argo-cd-cluster-name
-                    operator: NotIn
-                    values: [in-cluster]
                   - key: enable_velero
                     operator: In
                     values: ['true']
-                  - key: aws_cluster_name
-                    operator: Exists
           - clusters:
               selector:
                 matchLabels:
@@ -63,11 +58,6 @@ spec:
                 - name: default
                   provider: aws
                   bucket: {{metadata.annotations.velero_bucket_name}}
-                  config:
-                    region: us-east-1
-                volumeSnapshotLocation:
-                - name: default
-                  provider: aws
                   config:
                     region: us-east-1
               serviceAccount:
