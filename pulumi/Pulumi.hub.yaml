@@ -8,4 +8,6 @@ config:
   name: "hub"
   clusterType: "hub"
   implementationType: "github"
-  clusterComponents: {}
+  environment: ops
+  clusterComponents:
+    enable_velero: "true"

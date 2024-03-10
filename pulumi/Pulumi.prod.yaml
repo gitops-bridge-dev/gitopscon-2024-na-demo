@@ -9,4 +9,6 @@ config:
   githubRepo: "gitopscon-2024-na-demo"
   secretPath: "gitops/clusters/prod-cluster.yaml"
   implementationType: "github"
-  clusterComponents: {}
+  environment: prod
+  clusterComponents:
+    enable_velero: "true"

@@ -9,4 +9,6 @@ config:
   githubRepo: "gitopscon-2024-na-demo"
   secretPath: "gitops/clusters/dev-cluster.yaml"
   implementationType: "github"
-  clusterComponents: {}
+  environment: staging
+  clusterComponents:
+    enable_velero: "true"

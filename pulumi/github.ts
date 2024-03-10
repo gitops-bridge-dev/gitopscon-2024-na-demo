@@ -98,6 +98,7 @@ export class GitOpsClusterConfig {
   private generateLabels() {
     return {
       "argocd.argoproj.io/secret-type": "cluster",
+      "environment": this.config.require("environment"),
       ...this.config.requireObject<Object>("clusterComponents"),
     }
   }
