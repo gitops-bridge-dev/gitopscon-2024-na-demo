@@ -42,8 +42,8 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
-          - ../../../environments/{{.metadata.labels.environment}}/addons/{{.values.addonChart}}/values.yaml
-          - ../../../clusters/{{.name}}/addons/{{.values.addonChart}}/values.yaml
+          - ../../environments/{{.metadata.labels.environment}}/addons/{{.values.addonChart}}/values.yaml
+          - ../../clusters/{{.name}}/addons/{{.values.addonChart}}/values.yaml
       destination:
         namespace: '{{.metadata.labels.environment}}'
         name: '{{.name}}'
