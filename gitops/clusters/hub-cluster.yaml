@@ -5,6 +5,7 @@ metadata:
     argocd.argoproj.io/secret-type: cluster
     environment: ops
     enable_velero: 'true'
+    enable_app: 'false'
   annotations:
     aws_cluster_name: hub-cluster
     k8s_service_host: 2479598A0B25A29A79AAFFEB52D256F4.gr7.us-east-1.eks.amazonaws.com
