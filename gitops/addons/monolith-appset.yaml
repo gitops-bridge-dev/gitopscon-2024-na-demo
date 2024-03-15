@@ -36,14 +36,17 @@ spec:
     spec:
       project: default
       sources:
+      - repoURL: https://github.com/ImagineLearning/otk-platform
+        targetRevision: HEAD
+        ref: values
       - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
         targetRevision: HEAD
         path: gitops/charts/addons/monolith
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
-          - ../environments/{{.metadata.labels.environment}}/addons/{{.values.addonChart}}/values.yaml
-          - ../clusters/{{.name}}/addons/{{.values.addonChart}}/values.yaml
+          - $values/gitops/environments/{{.metadata.labels.environment}}/addons/{{.values.addonChart}}/values.yaml
+          - $values/gitops/clusters/{{.name}}/addons/{{.values.addonChart}}/values.yaml
       destination:
         namespace: '{{.metadata.labels.environment}}'
         name: '{{.name}}'
