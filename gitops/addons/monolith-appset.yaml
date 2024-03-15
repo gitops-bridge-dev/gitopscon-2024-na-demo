@@ -45,8 +45,8 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
-          - ../../../gitops/environments/{{.metadata.labels.environment}}/addons/{{.values.addonChart}}/values.yaml
-          - ../../../gitops/clusters/{{.name}}/addons/{{.values.addonChart}}/values.yaml
+          - ../../../../gitops/environments/{{.metadata.labels.environment}}/addons/{{.values.addonChart}}/values.yaml
+          - ../../../../gitops/clusters/{{.name}}/addons/{{.values.addonChart}}/values.yaml
       destination:
         namespace: '{{.metadata.labels.environment}}'
         name: '{{.name}}'
