@@ -36,7 +36,7 @@ spec:
     spec:
       project: default
       sources:
-      - repoURL: https://github.com/ImagineLearning/otk-platform
+      - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
         targetRevision: HEAD
         ref: values
       - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
