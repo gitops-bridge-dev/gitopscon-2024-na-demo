@@ -38,7 +38,7 @@ spec:
       sources:
       - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
         targetRevision: HEAD
-        path: charts/addons/monolith
+        path: gitops/charts/addons/monolith
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
