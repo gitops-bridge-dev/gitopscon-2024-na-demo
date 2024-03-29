@@ -1,6 +1,7 @@
 {
     "name": "gitops-bridge-ts",
     "main": "index.ts",
+    "type": "module",
     "devDependencies": {
         "@types/js-yaml": "^4.0.9",
         "@types/node": "^16.18.61"
@@ -11,6 +12,7 @@
         "@pulumi/eks": "^2.0.0",
         "@pulumi/github": "^5.22.0",
         "@pulumi/pulumi": "^3.0.0",
-        "process": "^0.11.10"
+        "process": "^0.11.10",
+        "ts-node": "^10.9.2"
     }
 }

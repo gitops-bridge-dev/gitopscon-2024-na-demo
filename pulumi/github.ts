@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as github from "@pulumi/github";
 import * as yaml from 'js-yaml';
-import { getValue } from "./utils"
+import { getValue } from "./utils.js"
 import { env } from "process";
 
 export class GitOpsClusterConfig {

@@ -1,3 +1,7 @@
 name: gitopscon-2024-na-demo
-runtime: nodejs
 description: GitOpsCon 2024 North America Demo Project
+runtime:
+  name: nodejs
+  options:
+    # See https://github.com/TypeStrong/ts-node/issues/1007
+    nodeargs: "--loader ts-node/esm --no-warnings"

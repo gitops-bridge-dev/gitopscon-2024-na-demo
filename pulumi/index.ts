@@ -1,9 +1,9 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as awsx from "@pulumi/awsx";
 import * as eks from "@pulumi/eks";
-import { createArgoRole } from "./iam"
-import { GitOpsClusterConfig } from "./github"
-import { createVeleroResources } from "./components"
+import { createArgoRole } from "./iam.js"
+import { GitOpsClusterConfig } from "./github.js"
+import { createVeleroResources } from "./components.js"
 
 const stackName = pulumi.getStack()
 const config = new pulumi.Config()
