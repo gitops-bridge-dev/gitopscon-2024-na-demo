@@ -63,7 +63,7 @@ jobs:
 
       - name: Installing dependencies 📦️
         run: |
-          cd ./pulumi/src
+          cd ./pulumi
           npm install
 
       - name: Deploy infrastructure 🚀
