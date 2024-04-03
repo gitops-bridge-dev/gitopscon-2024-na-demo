@@ -1,10 +1,5 @@
-name: Pulumi Deploy
+name: Pulumi Destroy
 on:
-  push:
-    branches:
-      - live
-    paths:
-      - pulumi/**
   workflow_dispatch: null
 
 jobs:
@@ -24,7 +19,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    name: Pulumi Deploy ${{ matrix.arrays.stack.name }}
+    name: Pulumi Destroy ${{ matrix.arrays.stack.name }}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
@@ -66,10 +61,10 @@ jobs:
           cd ./pulumi
           npm install
 
-      - name: Deploy infrastructure 🚀
+      - name: Destroy infrastructure 🚀
         uses: pulumi/actions@v5
         with:
-          command: up
+          command: destroy
           work-dir: ./pulumi
           stack-name: ${{ matrix.arrays.stack.name }}
           comment-on-summary: true
@@ -77,3 +72,4 @@ jobs:
         env:
          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
          GITHUB_TOKEN: ${{ secrets.PULUMI_GITHUB_TOKEN }}
+         PULUMI_K8S_DELETE_UNREACHABLE: true
