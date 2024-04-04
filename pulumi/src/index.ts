@@ -121,7 +121,7 @@ const eksCluster = new eks.Cluster(`${stackName}-cluster`, {
   // }]
 })
 
-const example = new aws.eks.Addon("eks-pod-identity-agent", {
+new aws.eks.Addon("eks-pod-identity-agent", {
   clusterName: eksCluster.eksCluster.name,
   addonName: "eks-pod-identity-agent",
 });
