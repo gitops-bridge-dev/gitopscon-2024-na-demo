@@ -9,14 +9,14 @@ helm repo add argo https://argoproj.github.io/argo-helm || true
 helm repo update
 helm upgrade --install argocd argo/argo-cd --namespace argocd --create-namespace --wait
 
-kubectl create secret generic private-repo-creds -n argocd \
-    --from-literal=username=REPLACE_USERNAME \
-    --from-literal=password=$GITHUB_TOKEN \
-    --from-literal=type=git \
-    --from-literal=url=https://github.com/csantanapr/gitopscon-2024-na-demo-carlos \
-    --dry-run=client -o yaml | \
-    sed "s/namespace: argocd/namespace: argocd\n  labels:\n    argocd.argoproj.io\/secret-type: repository/" | \
-    kubectl apply -f -
+# kubectl create secret generic private-repo-creds -n argocd \
+#     --from-literal=username=REPLACE_USERNAME \
+#     --from-literal=password=$GITHUB_TOKEN \
+#     --from-literal=type=git \
+#     --from-literal=url=https://github.com/REPLACE_FORK/gitopscon-2024-na-demo \
+#     --dry-run=client -o yaml | \
+#     sed "s/namespace: argocd/namespace: argocd\n  labels:\n    argocd.argoproj.io\/secret-type: repository/" | \
+#     kubectl apply -f -
 
 sleep 60
 # Deploy Application Set
