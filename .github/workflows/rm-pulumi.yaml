@@ -1,21 +1,16 @@
 name: Pulumi Remove Stack
 on:
-  workflow_dispatch: null
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'Stack to remove'
+        required: true
 
 jobs:
   preview:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      # This IAM Matrix should have a name with the stack name, awsAccountID, and iamRole
-      # with access to deploy AWS resources in you account. The easiest method is attaching AdministratorAccess Policy to role
-      # See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services for details on implementing OIDC with Github Actions
-      matrix:
-        arrays: [
-          stack: {name: "hub", awsAccountID: "AWS_ACCOUNT_ID", iamRole: "AWS_DEPLOY_ROLE"},
-          stack: {name: "dev", awsAccountID: "AWS_ACCOUNT_ID", iamRole: "AWS_DEPLOY_ROLE"},
-          stack: {name: "prod", awsAccountID: "AWS_ACCOUNT_ID", iamRole: "AWS_DEPLOY_ROLE"},
-        ]
     permissions:
       id-token: write
       contents: read
@@ -23,14 +18,6 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-          ## the following creates an ARN based on the values entered into github secrets
-          role-to-assume: arn:aws:iam::${{ secrets[matrix.arrays.stack.awsAccountID] }}:role/${{ secrets[matrix.arrays.stack.iamRole] }}
-          role-session-name: myGitHubActions
 
       - name: 📦️ Pulumi Install 📦️
         uses: pulumi/actions@v5
@@ -40,4 +27,4 @@ jobs:
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
-          pulumi stack rm ${{ matrix.arrays.stack.name }}
+          pulumi stack rm ${{ inputs.stack }}
