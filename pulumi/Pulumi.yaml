@@ -1,6 +1,6 @@
 # Reference docs for this configuration file
 # - https://www.pulumi.com/docs/concepts/projects/project-file
-name: gitopscon-2024-na-demo-carlos
+name: gitopscon-2024-na-demo
 runtime:
   name: nodejs
   options:
