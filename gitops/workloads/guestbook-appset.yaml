@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: workload-guestbook
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              values:
+                chartName: guestbook
+              selector:
+                matchExpressions:
+                  - key: enable_app
+                    operator: In
+                    values:
+                      - 'true'
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: environment
+                    operator: NotIn
+                    values:
+                      - 'ops'
+  template:
+    metadata:
+      name: 'addon-{{.name}}-guestbook'
+      labels:
+        chartName: '{{.values.chartName}}'
+        appsetFileName: 'guestbook-appset'
+        environment: '{{.metadata.labels.environment}}'
+        type: 'workload'
+    spec:
+      project: default
+      sources:
+      - repoURL: '{{.metadata.annotations.addons_repo_url}}'
+        targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
+        ref: values
+      - repoURL: '{{.metadata.annotations.addons_repo_url}}'
+        targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
+        path: gitops/charts/{{.values.chartName}}
+        helm:
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/gitops/environments/{{.metadata.labels.environment}}/workloads/{{.values.chartName}}/values.yaml
+          - $values/gitops/clusters/{{.name}}/workloads/{{.values.chartName}}/values.yaml
+      destination:
+        namespace: '{{.values.chartName}}'
+        name: '{{.name}}'
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true  # Big CRDs.

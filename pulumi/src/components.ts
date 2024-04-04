@@ -2,8 +2,10 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 
 export function createVeleroResources(awsAccountId: string, oidcProviderUrl: pulumi.Output<any>, stackName: string) {
+  const config = new pulumi.Config()
+  const bucketPrefix = config.require("veleroBucketPrefix")
   const bucket = new aws.s3.Bucket("velero-bucket", {
-    bucket: `gitopscon-na-24-velero-backups-${stackName}`,
+    bucket: `${bucketPrefix}-${stackName}`,
     acl: "private",
     versioning: {
       enabled: true,

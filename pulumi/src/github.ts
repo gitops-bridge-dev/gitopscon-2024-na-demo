@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as github from "@pulumi/github";
 import * as yaml from 'js-yaml';
-import { getValue } from "./utils"
+import { getValue } from "./utils.js"
 import { env } from "process";
 
 export class GitOpsClusterConfig {
@@ -51,9 +51,9 @@ export class GitOpsClusterConfig {
 
   private generateConfig(clusterAuthority: pulumi.Output<string>) {
     if (this.config.require("clusterType") !== "hub") {
-      return pulumi.all([this.outputs.argoRoleArn, clusterAuthority]).apply(([argoRoleArn, clusterAuthority]) => `{
+      return pulumi.all([this.outputs.argoRoleArn, this.outputs.clusterName, clusterAuthority]).apply(([argoRoleArn, clusterName, clusterAuthority]) => `{
   "awsAuthConfig": {
-    "clusterName": "${this.config.require("name")}-cluster",
+    "clusterName": "${clusterName}",
     "roleARN": "${argoRoleArn}"
   },
   "tlsClientConfig": {
@@ -78,18 +78,39 @@ export class GitOpsClusterConfig {
       this.outputs.clusterApiEndpoint,
       this.outputs.veleroBucket,
       this.outputs.veleroIamRoleArn,
+      this.outputs.addons_repo_url,
+      this.outputs.addons_repo_revision,
+      this.outputs.aws_region,
+      this.outputs.aws_account_id,
+      this.outputs.velero_namespace,
+      this.outputs.velero_service_account,
+      this.outputs.velero_backup_s3_bucket_prefix,
     ])
     const annotations = outputs.apply(([
       clusterName,
       clusterApiEndpoint,
       veleroBucket,
       veleroIamRoleArn,
+      addons_repo_url,
+      addons_repo_revision,
+      aws_region,
+      aws_account_id,
+      velero_namespace,
+      velero_service_account,
+      velero_backup_s3_bucket_prefix,
     ]) => {
       return {
         "aws_cluster_name": clusterName,
         "k8s_service_host": clusterApiEndpoint.split("://")[1],
-        "velero_bucket_name": veleroBucket,
-        "velero_iam_role_arn": veleroIamRoleArn
+        "velero_backup_s3_bucket_name": veleroBucket,
+        "velero_iam_role_arn": veleroIamRoleArn,
+        "addons_repo_url": addons_repo_url,
+        "addons_repo_revision": addons_repo_revision,
+        "aws_region": aws_region,
+        "aws_account_id": aws_account_id,
+        "velero_namespace": velero_namespace,
+        "velero_service_account": velero_service_account,
+        "velero_backup_s3_bucket_prefix": velero_backup_s3_bucket_prefix
       }
     })
     return annotations

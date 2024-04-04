@@ -1,23 +1,45 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: ApplicationSet
 metadata:
   name: argo-bootstrap
   namespace: argocd
 spec:
-  project: default
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   syncPolicy:
-    automated:
-      prune: false
-  destination:
-    namespace: argocd
-    server: https://kubernetes.default.svc
-  sources:
-    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
-      path: gitops/bootstrap
-      targetRevision: HEAD
-    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
-      path: gitops/clusters
-      targetRevision: HEAD
-    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
-      path: gitops/addons
-      targetRevision: HEAD
+    preserveResourcesOnDeletion: true
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: ops
+
+  template:
+    metadata:
+      name: argo-bootstrap
+      labels:
+        appsetFileName: 'bootstrap-app.yaml'
+        environment: '{{.metadata.labels.environment}}'
+        type: 'bootstrap'
+    spec:
+      project: default
+      sources:
+        - repoURL: '{{.metadata.annotations.addons_repo_url}}'
+          path: gitops/bootstrap
+          targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
+        - repoURL: '{{.metadata.annotations.addons_repo_url}}'
+          path: gitops/clusters
+          targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
+        - repoURL: '{{.metadata.annotations.addons_repo_url}}'
+          path: gitops/addons
+          targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
+        - repoURL: '{{.metadata.annotations.addons_repo_url}}'
+          path: gitops/workloads
+          targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
+      destination:
+        namespace: argocd
+        name: '{{.name}}'
+      syncPolicy:
+        automated:
+          allowEmpty: true
+          prune: false
