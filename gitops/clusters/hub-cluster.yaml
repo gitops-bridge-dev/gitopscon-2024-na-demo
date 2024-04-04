@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+    environment: ops
+    enable_velero: 'true'
+  annotations:
+    aws_cluster_name: hub-cluster
+    k8s_service_host: F0D91DC866E1089D5962EB0D3C2DED32.gr7.us-east-1.eks.amazonaws.com
+    velero_backup_s3_bucket_name: gitopscon-na-24-velero-backups-hub
+    velero_iam_role_arn: arn:aws:iam::753080021511:role/velero-role-a6520ef
+    addons_repo_url: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
+    addons_repo_revision: HEAD
+    aws_region: us-east-1
+    aws_account_id: '753080021511'
+    velero_namespace: velero
+    velero_service_account: velero
+    velero_backup_s3_bucket_prefix: backups
+  name: hub-cluster-secret
+  namespace: argocd
+type: Opaque
+stringData:
+  name: hub
+  server: https://kubernetes.default.svc
+data:
+  config: ewogICJ0bHNDbGllbnRDb25maWciOiB7CiAgICAiaW5zZWN1cmUiOiBmYWxzZQogIH0KfQo=
