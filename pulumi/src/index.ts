@@ -1,21 +1,38 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import * as eks from "@pulumi/eks";
-import { createArgoRole } from "./iam"
-import { GitOpsClusterConfig } from "./github"
-import { createVeleroResources } from "./components"
+import { createHubRole } from "./iam.js"
+import { createSpokeRole } from "./iam.js"
+import { GitOpsClusterConfig } from "./github.js"
+import { createVeleroResources } from "./components.js"
+
+const callerIdentity = aws.getCallerIdentity({});
+const awsAccountId = await callerIdentity.then(identity => identity.accountId);
+
+const region = aws.getRegion();
+const awsRegion = await region.then(r => r.name);
 
 const stackName = pulumi.getStack()
 const config = new pulumi.Config()
 
 let roleMappings: eks.RoleMapping[] = []
 
+const clusterComponents = config.requireObject("clusterComponents")
+
 export const outputs: {[key: string]: any} = {
   "stackName": stackName,
+  "addons_repo_url": `https://github.com/${config.require("githubOrg")}/${config.require("githubRepo")}`,
+  "addons_repo_revision": config.require("githubRevision"),
+  "aws_region": awsRegion,
+  "aws_account_id": awsAccountId,
+  "velero_namespace": "velero",
+  "velero_service_account": "velero",
+  "velero_backup_s3_bucket_prefix": "backups"
 }
 
 // VPC Config
-const vpc = new awsx.ec2.Vpc("vpc", {
+const vpc = new awsx.ec2.Vpc(stackName, {
   cidrBlock: config.require("cidrBlock"),
   numberOfAvailabilityZones: 3,
   enableDnsHostnames: true,
@@ -44,25 +61,29 @@ const vpc = new awsx.ec2.Vpc("vpc", {
         "kubernetes.io/role/elb": "1",
       },
     },
-  ],
-  tags: {
-    "name": stackName,
-  },
+  ]
 })
 
 // If we are creating a spoke cluster we need to create argoRole first, ensure it
 // gets added to auth mapping for the cluster with the correct permissions
 if (config.require("clusterType") === "spoke") {
-  const argoRole = createArgoRole(config.require("awsAccountId"), pulumi.output(""), config)
+  const argoRole = createSpokeRole(config)
   roleMappings.push({
     roleArn: argoRole.arn,
     username: argoRole.arn,
     groups: ["system:masters"],
-  })
+  }
+  )
   outputs.argoRoleArn = argoRole.arn
 }
 
 // Create EKS Cluster with a default node group
+// By default pulumi will attempt to apply sane dependency resolution to control
+// resource rollouts
+// - https://www.pulumi.com/docs/concepts/options/dependson
+// let res1 = new MyResource("res1", {/*...*/});
+// let res2 = new MyResource("res2", {/*...*/}, { dependsOn: [res1] });
+
 const eksCluster = new eks.Cluster(`${stackName}-cluster`, {
   name: `${stackName}-cluster`,
   vpcId: vpc.vpcId,
@@ -90,28 +111,33 @@ const eksCluster = new eks.Cluster(`${stackName}-cluster`, {
     "name": stackName,
   },
 },{
-  transformations: [args => {
-    if (args.type === "aws:eks/cluster:Cluster") {
-      args.props["accessConfig"] = {
-        authenticationMode: "API_AND_CONFIG_MAP"
-      };
-    }
-    return undefined;
-  }]
+  // transformations: [args => {
+  //   if (args.type === "aws:eks/cluster:Cluster") {
+  //     args.props["accessConfig"] = {
+  //       authenticationMode: "CONFIG_MAP"  //TODO investigate how to make it work with API_AND_CONFIG_MAP
+  //     };
+  //   }
+  //   return undefined;
+  // }]
 })
+
+const example = new aws.eks.Addon("eks-pod-identity-agent", {
+  clusterName: eksCluster.eksCluster.name,
+  addonName: "eks-pod-identity-agent",
+});
 
 outputs.clusterName = eksCluster.eksCluster.name
 outputs.clusterApiEndpoint = eksCluster.core.endpoint
 
 const oidcProviderUrl = eksCluster.core.oidcProvider?.url as pulumi.Output<string>
-const { veleroIamRole, veleroBucket } = createVeleroResources(config.require("awsAccountId"), oidcProviderUrl, config.require("name"))
+const { veleroIamRole, veleroBucket } = createVeleroResources(awsAccountId, oidcProviderUrl, stackName)
 outputs.veleroBucket = veleroBucket.bucket,
 outputs.veleroIamRoleArn = veleroIamRole.arn
 
 // If we are creating the hub cluster we need pods in eks cluster to be able to assume
 // so we need cluster created first
 if (config.require("clusterType") === "hub") {
-  const argoRole = createArgoRole(config.require("awsAccountId"), oidcProviderUrl, config)
+  const argoRole = createHubRole(eksCluster.eksCluster.name)
   outputs.argoRoleArn = argoRole.arn
 }
 

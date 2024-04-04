@@ -1,0 +1,14 @@
+config:
+  aws:region: us-east-1
+  cidrBlock: 10.0.0.0/16
+  clusterType: "spoke"
+  environment: staging
+  secretPath: "gitops/clusters/dev-cluster.yaml"
+  hubStackName: "pulumiaccount/gitopscon-2024-na-demo/hub"
+  githubOrg: "gitops-bridge-dev"
+  githubRepo: "gitopscon-2024-na-demo"
+  githubRevision: "HEAD"
+  veleroBucketPrefix: "velero-backup-bucket"
+  clusterComponents:
+    enable_velero: "true"
+    enable_app: "true"

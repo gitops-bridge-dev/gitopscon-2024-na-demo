@@ -38,30 +38,30 @@ jobs:
       - name: 📦️ Pulumi Install 📦️
         uses: pulumi/actions@v5
 
-      # - name: Overrides Pulumi Config 🔨
-      #   working-directory: pulumi
-      #   env:
-      #     PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-      #   run: |
-      #     pulumi stack select ${{ matrix.arrays.stack.name }}
-      #     pulumi config set githubOrg ${GITHUB_REPOSITORY_OWNER}
-      #     pulumi config set githubRepo $(echo "${GITHUB_REPOSITORY}" | cut -d '/' -f2)
-      #     pulumi config set veleroBucketPrefix ${{ secrets.VELERO_BACKUP_BUCKET }}
-      #     if [ ${{ matrix.arrays.stack.name }} != "hub" ]; then
-      #       pulumi config set hubStackName ${{ secrets.PULUMI_ACCOUNT }}/${{ secrets.PULUMI_PROJECT }}/hub
-      #     fi
-      #     cat stacks/Pulumi.${{ matrix.arrays.stack.name }}.yaml
+      - name: Overrides Pulumi Config 🔨
+        working-directory: pulumi
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+        run: |
+          pulumi stack select ${{ matrix.arrays.stack.name }}
+          pulumi config set githubOrg ${GITHUB_REPOSITORY_OWNER}
+          pulumi config set githubRepo $(echo "${GITHUB_REPOSITORY}" | cut -d '/' -f2)
+          pulumi config set veleroBucketPrefix ${{ secrets.VELERO_BACKUP_BUCKET }}
+          if [ ${{ matrix.arrays.stack.name }} != "hub" ]; then
+            pulumi config set hubStackName ${{ secrets.PULUMI_ACCOUNT }}/${{ secrets.PULUMI_PROJECT }}/hub
+          fi
+          cat stacks/Pulumi.${{ matrix.arrays.stack.name }}.yaml
 
       - name: Setup Node LTS ✨
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          # cache: npm
-          # cache-dependency-path: pulumi/src/package-lock.json
+          cache: npm
+          cache-dependency-path: pulumi/src/package-lock.json
 
       - name: Installing dependencies 📦️
         run: |
-          cd ./pulumi
+          cd ./pulumi/src
           npm install
 
       - name: Preview infrastructure 🚀
