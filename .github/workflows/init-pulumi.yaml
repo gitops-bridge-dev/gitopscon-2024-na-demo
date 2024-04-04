@@ -19,7 +19,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    name: Pulumi Preview ${{ matrix.arrays.stack.name }}
+    name: Pulumi Init ${{ matrix.arrays.stack.name }}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
