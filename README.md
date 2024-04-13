@@ -2,6 +2,13 @@
 
 ![Architecture Diagram of GitOps Flow with Gitops Bridge and Pulumi](assets/gitopscon-na24.png)
 
+### References
+- GitOps Bridge: https://github.com/gitops-bridge-dev
+- CNCF Slack Channels: [#argocd-gitops-bridge](https://cloud-native.slack.com/archives/C06GA4TNPPH), [#cnoe-interest](https://cloud-native.slack.com/archives/C06GA4TNPPH)
+- CNOE: https://cnoe.io
+- Previous talks KubeCon: [Building a Bridge Between ArgoCD and Terraform](youtube.com/watch?v=ggJzfJgWO8c)
+
+
 ### Prerequisites
 - [Get a Free Pulumi Cloud account](https://app.pulumi.com/)
 - [Install pulumi CLI](https://www.pulumi.com/docs/clouds/aws/get-started/begin/#install-pulumi)
